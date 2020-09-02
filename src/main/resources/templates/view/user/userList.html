@@ -1,0 +1,56 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8" />
+
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+<script th:src="@{/js/jquery-3.4.1.slim.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+</head>
+<body>
+	<div class="card">
+		<div class="card-header">Electricity User List</div>
+		<div class="card-body">
+			<div class="form-group col-sm-12">
+				<div class="col-sm-6 image-upload">
+					<table class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">First</th>
+								<th scope="col">Last</th>
+								<th scope="col">Provider</th>
+								<th scope="col">Meter Number</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="dto, itr : ${electricityUserDTOs}">
+								<th scope="row" th:text="${itr.count}"></th>
+								<td th:text="${dto.firstName}"></td>
+								<td th:text="${dto.lastName}"></td>
+								<td th:text="${dto.electricityProvider}"></td>
+								<td th:text="${dto.meterNumber}"></td>
+							</tr>
+						</tbody>
+					</table>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+
+		$(document).ready(function() {
+		});
+
+		/*]]>*/
+	</script>
+</body>
+</html>
