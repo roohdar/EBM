@@ -66,4 +66,23 @@ public class ElectricityUserServiceImpl implements ElectricityUserService{
 		// TODO Auto-generated method stub
 		return electricityUserRepository.findByEmail(email);
 	}
+
+	@Override
+	public List<ElectricityUserDTO> getAllElectricityUserByProviders(Long providorId) {
+		List<ElectricityUser> electricityUsers = electricityUserRepository.getAllElectricityUserByProviders(providorId);
+		List<ElectricityUserDTO> electricityUserDTOs = new ArrayList<ElectricityUserDTO>();
+
+		Map<Long, String> meterNumberWithUserId = electricMeterService.getMeterNumberWithUserId();
+
+		electricityUsers.stream().forEach(user->{
+			ElectricityUserDTO dto = new ElectricityUserDTO();
+			JavaReflection.copyMyObject(user, dto);
+			dto.setEncryptedId(EncryptDecryptUtils.encrypt(String.valueOf(user.getId())));
+			dto.setElectricityProvider(user.getElectricityProvider().getCompanyName());
+			dto.setMeterNumber(meterNumberWithUserId.get(user.getId()));
+			electricityUserDTOs.add(dto);
+		});
+
+		return electricityUserDTOs;
+	}
 }
