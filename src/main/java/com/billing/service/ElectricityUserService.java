@@ -13,5 +13,6 @@ public interface ElectricityUserService {
 	public List<ElectricityUserDTO> getAllElectricityUser();
 	public List<ElectricityUserDTO> getAllElectricityUserByProviders(Long providorId);
 	public ElectricityUser getByEmail(String email);
-
+	public ElectricityUserDTO setToDTO(ElectricityUser electricityUser);
+	public ElectricityUserDTO getElectricityUserById(Long id);
 }

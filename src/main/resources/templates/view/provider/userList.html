@@ -26,7 +26,7 @@
 								<th scope="col">Last</th>
 								<th scope="col">Provider</th>
 								<th scope="col">Meter Number</th>
-								<th>Add Reading</th>
+								<th scope="col">Average  Electricity Consumption</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -35,7 +35,10 @@
 								<td th:text="${dto.firstName}"></td>
 								<td th:text="${dto.lastName}"></td>
 								<td th:text="${dto.electricityProvider}"></td>
-								<td th:text="${dto.meterNumber}"></td>
+								<td>
+								<a th:href="@{/provider/addMeterReading/{meterNumber}(meterNumber=${dto.meterNumber})}" th:text="${dto.meterNumber}"></a>
+								</td>
+								<td th:text="${dto.averageelectricityconsumption}"></td>
 							</tr>
 						</tbody>
 					</table>

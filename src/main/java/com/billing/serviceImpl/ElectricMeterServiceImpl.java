@@ -1,19 +1,17 @@
-package com.billing.service;
+package com.billing.serviceImpl;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.billing.constant.ElectricityConstant;
 import com.billing.entity.ElectricMeter;
-import com.billing.entity.ElectricityUser;
 import com.billing.repository.ElectricityMeterRepository;
+import com.billing.service.ElectricMeterService;
 
 @Service
 public class ElectricMeterServiceImpl implements ElectricMeterService{
@@ -24,7 +22,7 @@ public class ElectricMeterServiceImpl implements ElectricMeterService{
 	@Override
 	public void saveElectricMeter(ElectricMeter electricMeter) {
 		ElectricityConstant.setBaseClassDetails(electricMeter);
-		electricMeter.setMeterNumber(String.valueOf(new Random().nextInt()));
+		electricMeter.setMeterNumber(String.valueOf(new Random().nextLong()));
 		electricityMeterRepository.save(electricMeter);
 	}
 
@@ -37,6 +35,16 @@ public class ElectricMeterServiceImpl implements ElectricMeterService{
 			map.put(meter.getElectricityUser().getId(), meter.getMeterNumber());
 		});
 		return map;
+	}
+
+	@Override
+	public ElectricMeter findByMeterNumber(String meterNumber) {
+		return electricityMeterRepository.findByMeterNumber(meterNumber);
+	}
+
+	@Override
+	public ElectricMeter findById(Long id) {
+		return electricityMeterRepository.findOne(id);
 	}
 
 }

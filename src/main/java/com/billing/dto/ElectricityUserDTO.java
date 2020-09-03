@@ -17,5 +17,7 @@ public class ElectricityUserDTO {
 	private String mobile;
 	private String electricityProvider;
 	private String meterNumber;
+	private String encryptedMeterId;
+	private String averageelectricityconsumption;
 
 }

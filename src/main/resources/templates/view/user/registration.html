@@ -20,6 +20,7 @@
 				<div class="col-sm-6 image-upload">
 					<form method="POST" th:object="${electricityUserDTO}"
 						th:action="@{/user/registerUser}">
+						<input type="hidden" th:field="*{encryptedId}" />
 						<div class="form-group row">
 							<label for="companyName" class="col-sm-2 col-form-label">First
 								name* : </label>

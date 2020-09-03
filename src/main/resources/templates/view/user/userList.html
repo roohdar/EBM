@@ -33,7 +33,9 @@
 								<th scope="row" th:text="${itr.count}"></th>
 								<td th:text="${dto.firstName}"></td>
 								<td th:text="${dto.lastName}"></td>
-								<td th:text="${dto.electricityProvider}"></td>
+								<td>
+								<a th:text="${dto.electricityProvider}" th:href="@{/user/edit/{encryptedId}(encryptedId=${dto.encryptedId})}"></a>
+								</td>
 								<td th:text="${dto.meterNumber}"></td>
 							</tr>
 						</tbody>

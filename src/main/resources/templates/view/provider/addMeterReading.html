@@ -1,0 +1,147 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8" />
+
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+
+<script th:src="@{/js/jquery-3.4.1.slim.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/popper.min.js}"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+</head>
+<body>
+	<div class="card">
+		<div class="card-header">
+			<span th:text="${meterNumber}"></span> Meter Reading
+		</div>
+		<div class="card-body">
+			<div class="form-group col-sm-12">
+				<div>
+					<div class="col-sm-6" style="float: left;">
+						<form method="POST" th:object="${meterReading}"
+							th:action="@{/provider/saveMeterReading}">
+							<input type="hidden" th:field="*{meterencryptedId}" />
+							<div class="form-group row">
+								<label for="startdate" class="col-sm-2 col-form-label">Start
+									Date* : </label>
+								<div class="col-sm-10">
+									<input th:field="*{startDate}" placeholder="Start date"
+										required="required" type="date" class="form-control" />
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="startdate" class="col-sm-2 col-form-label">End
+									Date* : </label>
+								<div class="col-sm-10">
+									<input th:field="*{endDate}" placeholder="End date" type="date"
+										required="required" class="form-control" />
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="unit" class="col-sm-2 col-form-label">Unit*
+									: </label>
+								<div class="col-sm-10">
+									<input th:field="*{unit}" placeholder="unit" type="text"
+										required="required" class="form-control" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-sm-6 col-sm-offset-6">
+									<button type="submit" id="submit" class="btn btn-primary mb-2">Add
+										Reading</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="col-sm-6" style="float: left;">
+
+						<div class="form-group">
+							<label for="yearSelect">Yearly electricity consumption
+								report</label> <select class="form-control" id="yearSelect">
+								<option value="2018">2018</option>
+								<option value="2019">2019</option>
+								<option value="2020">2020</option>
+							</select>
+
+							<div class="col-sm-6" style="margin: 10px;">
+								<b>Total Bills : </b><span id="totalBills"></span><br /> <b>Average
+									Consumption : </b><span id="yearlyAverageConsumption"></span>
+								<table class="table" id="yearlyConsumptionTable">
+
+								</table>
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<table class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Start Date</th>
+								<th scope="col">End Date</th>
+								<th scope="col">Unit</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="dto, itr : ${meterReadings}">
+								<th scope="row" th:text="${itr.count}"></th>
+								<td th:text="${dto.startDate}"></td>
+								<td th:text="${dto.startDate}"></td>
+								<td th:text="${dto.Unit}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			var meterNumber = [[${meterNumber}]];
+			$(document).ready(function() {
+				$("#yearSelect").on('change',function(){
+					var year = $("#yearSelect").val(); 
+					$("#yearlyConsumptionTable").html('');
+					var html = '<thead class="thead-dark"><tr>';
+						html +='<th scope="col">#</th>';
+						html +='<th scope="col">Start Date</th>';
+						html +='<th scope="col">End Date</th>';
+						html +='<th scope="col">Unit</th></tr></thead>';
+					
+					$.ajax({
+			  			url: "/provider/getYearlyElectricityConsumptionReport/" + year + "/" + meterNumber,
+			  	        type: 'GET',
+			  	        processData: false,
+			  	        contentType: false,
+			  	        success: function(data){
+			  	        	
+			  	        	$("#totalBills").html(data.count);
+			  	        	$("#yearlyAverageConsumption").html(data.average);
+				  	         	html += '<tbody>';
+			  	      		$.each(data.electricityMeterReadingDTOs, function (i) {
+			  	      			
+			  	            	html +='<tr><td>'+(i+1)+'</td>';
+			  	            	html +='<td>'+data.electricityMeterReadingDTOs[i].startDate+'</td>';
+			  	          		html +='<td>'+data.electricityMeterReadingDTOs[i].endDate+'</td>';
+			  	            	html +='<td>'+data.electricityMeterReadingDTOs[i].unit+'</td></tr>'
+			  	    		});
+			  	      		html += '<tbody>'
+				  	        $("#yearlyConsumptionTable").append(html);
+			  	        }
+			  		});	
+				});
+				
+			});
+
+			/*]]>*/
+		</script>
+</body>
+</html>
