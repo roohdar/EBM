@@ -19,7 +19,7 @@
 		</div>
 		<div class="card-body">
 			<div class="form-group col-sm-12">
-				<div>
+				<div style="width: 100%;">
 					<div class="col-sm-6" style="float: left;">
 						<form method="POST" th:object="${meterReading}"
 							th:action="@{/provider/saveMeterReading}">
@@ -45,7 +45,7 @@
 									: </label>
 								<div class="col-sm-10">
 									<input th:field="*{unit}" placeholder="unit" type="text"
-										required="required" class="form-control" />
+										id="unit" required="required" class="form-control" />
 								</div>
 							</div>
 
@@ -58,7 +58,6 @@
 						</form>
 					</div>
 					<div class="col-sm-6" style="float: left;">
-
 						<div class="form-group">
 							<label for="yearSelect">Yearly electricity consumption
 								report</label> <select class="form-control" id="yearSelect">
@@ -74,34 +73,32 @@
 
 								</table>
 							</div>
-
-
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-6">
-					<table class="table">
-						<thead class="thead-dark">
-							<tr>
-								<th scope="col">#</th>
-								<th scope="col">Start Date</th>
-								<th scope="col">End Date</th>
-								<th scope="col">Unit</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="dto, itr : ${meterReadings}">
-								<th scope="row" th:text="${itr.count}"></th>
-								<td th:text="${dto.startDate}"></td>
-								<td th:text="${dto.startDate}"></td>
-								<td th:text="${dto.Unit}"></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-
 			</div>
 		</div>
+			<div class="col-sm-6">
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Start Date</th>
+							<th scope="col">End Date</th>
+							<th scope="col">Unit</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="dto, itr : ${meterReadings}">
+							<th scope="row" th:text="${itr.count}"></th>
+							<td th:text="${dto.startDate}"></td>
+							<td th:text="${dto.startDate}"></td>
+							<td th:text="${dto.Unit}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
 	</div>
 	<script type="text/javascript" th:inline="javascript">
 			/*<![CDATA[*/
@@ -137,6 +134,16 @@
 				  	        $("#yearlyConsumptionTable").append(html);
 			  	        }
 			  		});	
+				});
+				
+				
+				$("#unit").on('keypress', function (event) {
+				    var regex = new RegExp("[0-9]{1,5}");
+				    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+				    if (!regex.test(key)) {
+				       event.preventDefault();
+				       return false;
+				    }
 				});
 				
 			});
