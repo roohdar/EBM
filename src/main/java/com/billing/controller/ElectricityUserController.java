@@ -3,6 +3,7 @@ package com.billing.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,7 +60,7 @@ public class ElectricityUserController {
 	@RequestMapping(value = "/registerUser",method = RequestMethod.POST)
 	private String registerElectricityProvider(@ModelAttribute("electricityUserDTO") ElectricityUserDTO electricityUserDTO, ModelMap modelMap) {
 
-		if(electricityUserDTO.getEncryptedId()==null) {
+		if(electricityUserDTO.getEncryptedId()==null || StringUtils.isEmpty(electricityUserDTO.getEncryptedId())) {
 			ElectricityUser byEmail = electricityUserService.getByEmail(electricityUserDTO.getEmail());
 			if(byEmail==null) {
 				ElectricityProvider electricityProvider = electricityProviderService.getById(Long.parseLong(EncryptDecryptUtils.decrypt(electricityUserDTO.getElectricityProvider())));

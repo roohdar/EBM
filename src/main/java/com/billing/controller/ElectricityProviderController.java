@@ -129,11 +129,28 @@ public class ElectricityProviderController {
 		ElectricMeter electricMeter = electricMeterService.findByMeterNumber(meterNumber);
 
 		List<ElectricityMeterReadingDTO> electricityMeterReadingDTOs = electricityMeterReadingService.getAllReadingsByMeterNumberAndYear(electricMeter.getMeterNumber(), year);
-		Double average = electricityMeterReadingDTOs.stream() .mapToDouble(mr -> Double.parseDouble(mr.getUnit())).average().getAsDouble();
 
-		data.put("electricityMeterReadingDTOs", electricityMeterReadingDTOs);
-		data.put("average", average);
-		data.put("count", electricityMeterReadingDTOs.size());
+
+		if(electricityMeterReadingDTOs!=null && electricityMeterReadingDTOs.size()>0) {
+
+			Map<Integer, HashMap<String, String>> dtoData = new HashMap<Integer, HashMap<String,String>>();	
+			Integer index =1;
+			for(ElectricityMeterReadingDTO  dto : electricityMeterReadingDTOs) {
+				HashMap<String, String>  map = new HashMap<String, String>();
+				map.put("startDate", String.valueOf(dto.getStartDate()));
+				map.put("endDate", String.valueOf(dto.getEndDate()));
+				map.put("unit", String.valueOf(dto.getUnit()));
+				dtoData.put(index,map);
+				index++;
+			};
+			data.put("electricityMeterReading", dtoData);
+			Double average = electricityMeterReadingDTOs.stream() .mapToDouble(mr -> Double.parseDouble(mr.getUnit())).average().getAsDouble();
+			data.put("average", average);
+			data.put("count", electricityMeterReadingDTOs.size());
+			data.put("success", true);
+		}else
+			data.put("success", false);
+
 
 		return data;
 

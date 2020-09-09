@@ -8,6 +8,7 @@ import java.util.OptionalDouble;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.billing.constant.ElectricityConstant;
 import com.billing.dto.ElectricityUserDTO;
@@ -43,7 +44,7 @@ public class ElectricityUserServiceImpl implements ElectricityUserService{
 		
 		ElectricityUser electricityUser;
 		
-		if(electricityUserDTO.getEncryptedId()==null) {
+		if(electricityUserDTO.getEncryptedId()==null || StringUtils.isEmpty(electricityUserDTO.getEncryptedId())) {
 			electricityUser = new ElectricityUser();
 			JavaReflection.copyMyObject(electricityUserDTO, electricityUser);
 			ElectricityConstant.setBaseClassDetails(electricityUser);

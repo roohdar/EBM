@@ -13,6 +13,8 @@
 
 </head>
 <body>
+<th:block th:include="view/include/header :: copy"></th:block>
+
 	<div class="card">
 		<div class="card-header">
 			<span th:text="${meterNumber}"></span> Meter Reading
@@ -78,35 +80,39 @@
 				</div>
 			</div>
 		</div>
-			<div class="col-sm-6">
-				<table class="table">
-					<thead class="thead-dark">
-						<tr>
-							<th scope="col">#</th>
-							<th scope="col">Start Date</th>
-							<th scope="col">End Date</th>
-							<th scope="col">Unit</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="dto, itr : ${meterReadings}">
-							<th scope="row" th:text="${itr.count}"></th>
-							<td th:text="${dto.startDate}"></td>
-							<td th:text="${dto.startDate}"></td>
-							<td th:text="${dto.Unit}"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+		<div class="col-sm-6">
+			<table class="table">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Start Date</th>
+						<th scope="col">End Date</th>
+						<th scope="col">Unit</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="dto, itr : ${meterReadings}">
+						<th scope="row" th:text="${itr.count}"></th>
+						<td th:text="${dto.startDate}"></td>
+						<td th:text="${dto.startDate}"></td>
+						<td th:text="${dto.Unit}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
 	</div>
 	<script type="text/javascript" th:inline="javascript">
 			/*<![CDATA[*/
+				
 			var meterNumber = [[${meterNumber}]];
 			$(document).ready(function() {
 				$("#yearSelect").on('change',function(){
 					var year = $("#yearSelect").val(); 
 					$("#yearlyConsumptionTable").html('');
+					$("#totalBills").html('');
+	  	        	$("#yearlyAverageConsumption").html('');
+					
 					var html = '<thead class="thead-dark"><tr>';
 						html +='<th scope="col">#</th>';
 						html +='<th scope="col">Start Date</th>';
@@ -119,23 +125,22 @@
 			  	        processData: false,
 			  	        contentType: false,
 			  	        success: function(data){
-			  	        	
-			  	        	$("#totalBills").html(data.count);
-			  	        	$("#yearlyAverageConsumption").html(data.average);
+			  	        	if(data.success){
+			  	        		$("#totalBills").html(data.count);
+			  	        		$("#yearlyAverageConsumption").html(data.average);
 				  	         	html += '<tbody>';
-			  	      		$.each(data.electricityMeterReadingDTOs, function (i) {
-			  	      			
-			  	            	html +='<tr><td>'+(i+1)+'</td>';
-			  	            	html +='<td>'+data.electricityMeterReadingDTOs[i].startDate+'</td>';
-			  	          		html +='<td>'+data.electricityMeterReadingDTOs[i].endDate+'</td>';
-			  	            	html +='<td>'+data.electricityMeterReadingDTOs[i].unit+'</td></tr>'
-			  	    		});
-			  	      		html += '<tbody>'
-				  	        $("#yearlyConsumptionTable").append(html);
+			  	      			$.each(data.electricityMeterReading, function (i) {
+			  	            		html +='<tr><td>'+(i)+'</td>';
+				  	            	html +='<td>'+data.electricityMeterReading[i].startDate+'</td>';
+				  	          		html +='<td>'+data.electricityMeterReading[i].endDate+'</td>';
+				  	            	html +='<td>'+data.electricityMeterReading[i].unit+'</td></tr>'
+				  	    		});
+			  		      		html += '<tbody>'
+				  		        $("#yearlyConsumptionTable").append(html);
+			  	        	}
 			  	        }
 			  		});	
 				});
-				
 				
 				$("#unit").on('keypress', function (event) {
 				    var regex = new RegExp("[0-9]{1,5}");
